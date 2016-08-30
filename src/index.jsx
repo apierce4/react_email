@@ -44,7 +44,7 @@ var EMAILS = {
 };
 
 var App = function(props){
-    console.log("hi");
+    //console.log("hi");
     return(
         <div>
         <h1>Emails</h1>
@@ -56,12 +56,13 @@ var EmailFolder = function(props) {
     //console.log('hi' + props);
     return (
 
-              <Link to={'/emails:' + props.emailType}>{props.emailType}</Link>
+              <Link to={'/emails/' + props.emailType}>{props.emailType}</Link>
       
     );
 };
 var EmailContent = function(props){
     console.log("ec");
+    console.log(props);
     return(
         <div>
          {props.to}<br/>
@@ -72,13 +73,15 @@ var EmailContent = function(props){
 };
 //DISPLAY THE LIST EMAILS BASED ON TYPE
 var EmailList = function(props) {
-    console.log("list");
-    var emails = Object.keys(props.email).map(function(emailId, index) {
-        var email = emailId;
+    console.log("el");
+    console.log(props);
+    var emails = Object.keys(props).map(function(emailId, index) {
+        var email = props.emails[index];
+        console.log(props.emails[index]);
     
         return (
             <li key={index}>
-                <EmailContent emailType={email} />
+                <EmailContent to={email.to} from={email.from} title={email.title} />
             </li>
             
         );
@@ -113,14 +116,13 @@ var TypeList = function(props) {
 };
 
 var EmailListContainer = function() {
-    console.log("3");
+    //console.log("Type List");
     return <TypeList email={EMAILS} />;
 };
 //DISPLAY THE LIST EMAILS BASED ON TYPE
 var EmailTypeContainer = function(props) {
     var emailtype = EMAILS[props.params.emailType];
-    console.log("3");
-    return <EmailList title={emailtype.title} to={emailtype.to} from={emailtype.from} />;
+    return <EmailList emails={emailtype} />;
 };
 
 var routes = (

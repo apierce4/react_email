@@ -92,7 +92,7 @@
 	};
 	
 	var App = function App(props) {
-	    console.log("hi");
+	    //console.log("hi");
 	    return React.createElement(
 	        'div',
 	        null,
@@ -108,12 +108,13 @@
 	    //console.log('hi' + props);
 	    return React.createElement(
 	        Link,
-	        { to: '/emails:' + props.emailType },
+	        { to: '/emails/' + props.emailType },
 	        props.emailType
 	    );
 	};
 	var EmailContent = function EmailContent(props) {
 	    console.log("ec");
+	    console.log(props);
 	    return React.createElement(
 	        'div',
 	        null,
@@ -126,14 +127,16 @@
 	};
 	//DISPLAY THE LIST EMAILS BASED ON TYPE
 	var EmailList = function EmailList(props) {
-	    console.log("list");
-	    var emails = Object.keys(props.email).map(function (emailId, index) {
-	        var email = emailId;
+	    console.log("el");
+	    console.log(props);
+	    var emails = Object.keys(props).map(function (emailId, index) {
+	        var email = props.emails[index];
+	        console.log(props.emails[index]);
 	
 	        return React.createElement(
 	            'li',
 	            { key: index },
-	            React.createElement(EmailContent, { emailType: email })
+	            React.createElement(EmailContent, { to: email.to, from: email.from, title: email.title })
 	        );
 	    });
 	    return React.createElement(
@@ -167,14 +170,13 @@
 	};
 	
 	var EmailListContainer = function EmailListContainer() {
-	    console.log("3");
+	    //console.log("Type List");
 	    return React.createElement(TypeList, { email: EMAILS });
 	};
 	//DISPLAY THE LIST EMAILS BASED ON TYPE
 	var EmailTypeContainer = function EmailTypeContainer(props) {
 	    var emailtype = EMAILS[props.params.emailType];
-	    console.log("3");
-	    return React.createElement(EmailList, { title: emailtype.title, to: emailtype.to, from: emailtype.from });
+	    return React.createElement(EmailList, { emails: emailtype });
 	};
 	
 	var routes = React.createElement(
