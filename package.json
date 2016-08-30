@@ -1,0 +1,27 @@
+{
+  "name": "Thinkful React Coursework",
+  "version": "0.0.0",
+  "description": "Series of example react projects.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node_modules/.bin/webpack-dev-server"
+  },
+  "repository": "",
+  "author": "Alissa Pierce <apierce@thinkful.com>",
+  "dependencies": {
+    "async": "~0.2.8",
+    "express": "~3.2.4",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
+    "socket.io": "~0.9.14"
+  },
+  "devDependencies": {
+    "babel-core": "^6.13.2",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.13.2",
+    "babel-preset-react": "^6.11.1",
+    "webpack": "^1.13.1",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
