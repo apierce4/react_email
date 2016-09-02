@@ -118,30 +118,62 @@
 	    return React.createElement(
 	        'div',
 	        null,
+	        'To:',
 	        props.to,
 	        React.createElement('br', null),
+	        'From:',
 	        props.from,
 	        React.createElement('br', null),
-	        props.title
+	        'Title:',
+	        React.createElement(
+	            Link,
+	            { to: '/emails/' + props.type + '/' + props.id },
+	            props.title
+	        )
+	    );
+	};
+	var InvEmailContent = function InvEmailContent(props) {
+	    console.log("iec");
+	    console.log(props);
+	    return React.createElement(
+	        'div',
+	        null,
+	        'To:',
+	        props.to,
+	        React.createElement('br', null),
+	        'From:',
+	        props.from,
+	        React.createElement('br', null),
+	        'Title:',
+	        props.title,
+	        React.createElement('br', null),
+	        'Content:',
+	        props.content
 	    );
 	};
 	//DISPLAY THE LIST EMAILS BASED ON TYPE
 	var EmailList = function EmailList(props) {
 	    console.log("el");
 	    console.log(props);
-	    var emails = Object.keys(props).map(function (emailId, index) {
+	    var type = props.type;
+	
+	    var emails = Object.keys(props.emails).map(function (emailId, index) {
 	        var email = props.emails[index];
-	        console.log(props.emails[index]);
 	
 	        return React.createElement(
 	            'li',
 	            { key: index },
-	            React.createElement(EmailContent, { to: email.to, from: email.from, title: email.title })
+	            React.createElement(EmailContent, { content: email, type: type, id: email.id, title: email.title, to: email.to, from: email.from })
 	        );
 	    });
 	    return React.createElement(
 	        'ul',
 	        null,
+	        React.createElement(
+	            'h2',
+	            null,
+	            type
+	        ),
 	        emails
 	    );
 	};
@@ -150,12 +182,12 @@
 	var TypeList = function TypeList(props) {
 	
 	    var typesofemail = Object.keys(props.email).map(function (emailId, index) {
-	        var email = emailId;
+	        var typeName = emailId;
 	
 	        return React.createElement(
 	            'li',
 	            { key: index },
-	            React.createElement(EmailFolder, { emailType: email })
+	            React.createElement(EmailFolder, { emailType: typeName })
 	        );
 	    });
 	    return React.createElement(
@@ -176,7 +208,13 @@
 	//DISPLAY THE LIST EMAILS BASED ON TYPE
 	var EmailTypeContainer = function EmailTypeContainer(props) {
 	    var emailtype = EMAILS[props.params.emailType];
-	    return React.createElement(EmailList, { emails: emailtype });
+	    var typeName = props.params.emailType;
+	    return React.createElement(EmailList, { emails: emailtype, type: typeName });
+	};
+	//DISPLAY A FULL EMAIL
+	var EmailContentContainer = function EmailContentContainer(props) {
+	    var fullEmail = EMAILS[props.params.emailId];
+	    return React.createElement(InvEmailContent, { content: fullEmail });
 	};
 	
 	var routes = React.createElement(
@@ -187,6 +225,18 @@
 	        { path: '/emails', component: App },
 	        React.createElement(IndexRoute, { component: EmailListContainer }),
 	        React.createElement(Route, { path: ':emailType', component: EmailTypeContainer })
+	    ),
+	    React.createElement(
+	        Route,
+	        { path: '/emails/inbox/', component: App },
+	        React.createElement(IndexRoute, { component: EmailListContainer }),
+	        React.createElement(Route, { path: ':emailID', component: EmailContentContainer })
+	    ),
+	    React.createElement(
+	        Route,
+	        { path: '/emails/spam/', component: App },
+	        React.createElement(IndexRoute, { component: EmailListContainer }),
+	        React.createElement(Route, { path: ':emailID', component: EmailContentContainer })
 	    )
 	);
 	

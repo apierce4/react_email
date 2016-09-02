@@ -65,9 +65,21 @@ var EmailContent = function(props){
     console.log(props);
     return(
         <div>
-         {props.to}<br/>
-         {props.from}<br/>
-         {props.title}
+         To:{props.to}<br/>
+         From:{props.from}<br/>
+         Title:<Link to={'/emails/'+ props.type +'/'+ props.id}>{props.title}</Link>
+        </div>
+        );
+};
+var InvEmailContent = function(props){
+    console.log("iec");
+    console.log(props);
+    return(
+        <div>
+         To:{props.to}<br/>
+         From:{props.from}<br/>
+         Title:{props.title}<br/>
+         Content:{props.content}
         </div>
         );
 };
@@ -75,33 +87,36 @@ var EmailContent = function(props){
 var EmailList = function(props) {
     console.log("el");
     console.log(props);
-    var emails = Object.keys(props).map(function(emailId, index) {
-        var email = props.emails[index];
-        console.log(props.emails[index]);
+    var type= props.type;
     
+    var emails = Object.keys(props.emails).map(function(emailId, index) {
+        var email = props.emails[index];
+
         return (
             <li key={index}>
-                <EmailContent to={email.to} from={email.from} title={email.title} />
+                <EmailContent content={email} type={type} id={email.id} title={email.title} to={email.to} from={email.from} />
             </li>
             
         );
     });
     return (
         <ul>
+        <h2>{type}</h2>
             {emails}
         </ul>
     );
+    
 };
 
 //DISPLAY THE TYPES OF EMAILS: Inbox or SPAM
 var TypeList = function(props) {
-
+    
     var typesofemail = Object.keys(props.email).map(function(emailId, index) {
-        var email = emailId;
+        var typeName = emailId;
     
         return (
             <li key={index}>
-                <EmailFolder emailType={email} />
+                <EmailFolder emailType={typeName} />
             </li>
             
         );
@@ -122,7 +137,13 @@ var EmailListContainer = function() {
 //DISPLAY THE LIST EMAILS BASED ON TYPE
 var EmailTypeContainer = function(props) {
     var emailtype = EMAILS[props.params.emailType];
-    return <EmailList emails={emailtype} />;
+    var typeName = props.params.emailType;
+    return <EmailList emails={emailtype} type={typeName} />;
+};
+//DISPLAY A FULL EMAIL
+var EmailContentContainer = function(props) {
+    var fullEmail = EMAILS[props.params.emailId];
+    return <InvEmailContent content={fullEmail} />;
 };
 
 var routes = (
@@ -130,6 +151,14 @@ var routes = (
          <Route path="/emails" component={App}>
             <IndexRoute component={EmailListContainer} />
             <Route path=":emailType" component={EmailTypeContainer} />
+        </Route>
+        <Route path="/emails/inbox/" component={App}>
+            <IndexRoute component={EmailListContainer} />
+            <Route path=":emailID" component={EmailContentContainer} />
+        </Route>
+        <Route path="/emails/spam/" component={App}>
+            <IndexRoute component={EmailListContainer} />
+            <Route path=":emailID" component={EmailContentContainer} />
         </Route>
     </Router>
 );
